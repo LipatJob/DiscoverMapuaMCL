@@ -17,6 +17,6 @@ public class AlignmentManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        
     }
 }
