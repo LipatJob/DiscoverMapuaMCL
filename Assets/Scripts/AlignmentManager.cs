@@ -4,19 +4,25 @@ using UnityEngine;
 
 public class AlignmentManager : MonoBehaviour
 {
-    public Transform target;
+    public GameObject target;
+    private float previousRotation;
+    private float rotationSmoothing = .1f;
 
-    // Start is called before the first frame update
     void Start()
     {
-        Input.compass.enabled = true;
+        Screen.sleepTimeout = SleepTimeout.NeverSleep;
         Input.location.Start();
-        target.transform.rotation = Quaternion.Euler(0, -Input.compass.magneticHeading, 0);
+        Input.compass.enabled = true;
+        previousRotation = Input.compass.trueHeading;
     }
 
-    // Update is called once per frame
     void Update()
     {
-
+        float currentRotation = Input.compass.trueHeading;
+        float rotationDelta = (currentRotation - previousRotation) * rotationSmoothing;
+        float filteredRotation = previousRotation + rotationDelta;
+        target.transform.rotation = Quaternion.Euler(0, filteredRotation, 0);
+        previousRotation = filteredRotation;
     }
+
 }
